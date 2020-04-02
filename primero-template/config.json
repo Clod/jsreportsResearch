@@ -1,0 +1,25 @@
+{
+    "shortid": "S1lkB4FBI8",
+    "name": "primero-template",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true,
+        "format": "A4",
+        "mediaType": "screen",
+        "displayHeaderFooter": true
+    },
+    "creationDate": {
+        "$$date": 1584924012440
+    },
+    "modificationDate": {
+        "$$date": 1585839556334
+    },
+    "_id": "sQs81e0WKW9LekFs",
+    "$entitySet": "templates",
+    "scripts": [
+        {
+            "shortid": "HJx2MVtS8L"
+        }
+    ]
+}

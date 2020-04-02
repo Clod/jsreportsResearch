@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Reporte de conductore</title>
+</head>
+
+<body>
+
+    <h1 class="text-center m-5 pb-5">Score por conductor</h1>
+
+    <div class="m-5 pb-5">
+        <small>
+
+            <table class="table table-sm table-striped" ">
+        <thead class="thead-dark ">
+            <tr class="text-center ">
+                <th class="text-center align-middle " scope="col ">ID</th>
+                <th class="text-center align-middle " scope="col ">Apellido</th>
+                <th class="text-center align-middle " scope="col ">Nombre</th>
+                <th class="text-center align-middle " scope="col ">Score</th>
+                <th class="text-center align-middle " scope="col ">Frenadas</th>
+                <th class="text-center align-middle " scope="col ">Aceleradas</th>
+                <th class="text-center align-middle " scope="col ">Uso del <br /> teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each drivers }}
+            <tr class="text-center ">
+                <th scope="row "> {{this.driver_id}} </th>
+                <th scope="row "> Pérez </th>
+                <th scope="row "> Juan </th>
+                <td> {{this.driving_behavior.score.zendrive_score}} </td>
+                <td> {{this.driving_behavior.event_rating.hard_brake_rating}} </td>
+                <td> {{this.driving_behavior.event_rating.rapid_acceleration_rating}} </td>
+                <td> {{this.driving_behavior.event_rating.phone_use_rating}} </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div> {{ unDriver }} </div>
+
+<div> {{ check}} </div>
+
+</small>
+</body>
+
+</html>

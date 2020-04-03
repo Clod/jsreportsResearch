@@ -3,15 +3,15 @@
 
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Reporte de conductore</title>
+    <title>Reporte de conductores</title>
 </head>
 
 <body>
 
     <h1 class="text-center m-5 pb-5">Score por conductor</h1>
 
-    <div class="m-5 pb-5">
-        <small>
+    <div class="m-5 pb-5" style="font-size: 8px">
+
 
             <table class="table table-sm table-striped" ">
         <thead class="thead-dark ">
@@ -29,8 +29,8 @@
             {{#each drivers }}
             <tr class="text-center ">
                 <th scope="row "> {{this.driver_id}} </th>
-                <th scope="row "> Pérez </th>
-                <th scope="row "> Juan </th>
+                <th scope="row "> {{this.info.attributes.last_name}} </th>
+                <th scope="row "> {{this.info.attributes.first_name}}  </th>
                 <td> {{this.driving_behavior.score.zendrive_score}} </td>
                 <td> {{this.driving_behavior.event_rating.hard_brake_rating}} </td>
                 <td> {{this.driving_behavior.event_rating.rapid_acceleration_rating}} </td>
@@ -45,7 +45,7 @@
 
 <div> {{ check}} </div>
 
-</small>
+
 </body>
 
 </html>

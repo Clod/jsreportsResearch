@@ -3,17 +3,293 @@
 
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
     <title>Reporte de conductores</title>
+    <meta name="viewport" content="width=device-width">
+    <script src="https://www.koolchart.com/demo/LicenseKey/KoolChartLicense.js"></script>
+    <script src="https://www.koolchart.com/demo/KoolChart/JS/KoolChart.js"></script>
+    <link rel="stylesheet" href="https://www.koolchart.com/demo/KoolChart/Assets/Css/KoolChart.css" />
 </head>
 
 <body>
 
+    <div id="chartHolder1" style="width:100%; height:200px;"></div>
+    <hr \>
+    <div id="chartHolder2" style="width:100%; height:200px;"></div>
+    <hr \>
+
+            <div id="chartHolder3" style="width:100%; height:200px;"></div>
+
+
+
+    <script>
+var chartVars = "KoolOnLoadCallFunction=chartReadyHandler";
+
+KoolChart.create("chart1", "chartHolder1", chartVars, "100%", "100%");
+
+
+function chartReadyHandler(id) {
+  document.getElementById(id).setLayout(layoutStr1);
+  document.getElementById(id).setData(chartData1);
+  window.JSREPORT_READY_TO_START = true; //this will start the pdf printing
+}
+
+
+var layoutStr1 =
+  '<KoolChart>'
+   +'<Gauge innerRatio="0.5" nameField="name" valueField="value" backgroundColors="[#f0f0f0]" foregroundColors="[#5587a2,#20cbc2,#f6a54c]" minimum="0" maximum="100" startAngle="-90" minimumAngle="0" maximumAngle="270" color="#ffffff" fontSize="20" fontWeight="bold" labelYOffset="2">'
+    +'<backgroundElements>'
+     +'<Box width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">'
+      +'<SubLegend direction="vertical" fontSize="13" color="#666666" borderStyle="none">'
+       +'<LegendItem label="English">'
+        +'<fill>'
+         +'<SolidColor color="#5587a2"/>'
+        +'</fill>'
+       +'</LegendItem>'
+       +'<LegendItem label="Math">'
+        +'<fill>'
+         +'<SolidColor color="#20cbc2"/>'
+        +'</fill>'
+       +'</LegendItem>'
+       +'<LegendItem label="History">'
+        +'<fill>'
+         +'<SolidColor color="#f6a54c"/>'
+        +'</fill>'
+       +'</LegendItem>'
+      +'</SubLegend>'
+     +'</Box>'
+    +'</backgroundElements>'
+   +'</Gauge>'
+  +'</KoolChart>';
+
+var chartData1 =
+  [{"name" : "English", "value" : 100},
+  {"name" : "Math", "value" : 74},
+  {"name" : "History", "value" : 82},
+  {"name" : "Language", "value" : 90}];
+
+
+  
+// Create a chart.
+// Parameters:
+// 1. Chart Identifier (You can use any name you like.)
+// 2. <div> Identifier (The <div> where the chart is created.)
+// 3. Variables used for creating the chart (chartVars)
+// 4. Chart Width (default: 100%)
+// 5. Chart Height (default: 100%)
+KoolChart.create("chart2", "chartHolder2", "", "100%", "100%");
+ 
+// Range Values
+var trackValues = [0,20,40,60,80,100];
+ 
+// Range Labels
+var trackLabels = ["ALTO RIESGO","RIESGO","REGULAR","BUENO","EXCELENTE"];
+ 
+// Use a string variable for Layout.
+var layoutStr2 =
+                '<KoolChart frameColor="#EEEEEE" borderStyle="none">'
+                 +'<Options>'
+                      +'<Caption text="Half-Circular Gauge - Rainbow 2"/>'
+                  +'</Options>'
+                 +'<HalfCircularGauge valueChangeFunction="valueChangeFunc" frameType="flat" trackLabelStyleName="trackText" minimumAngle="180" maximumAngle="360" minimum="0" maximum="100" interval="20" minorInterval="20" tickGap="0" padding="-30" showValueLabel="false" tickLabelStyleName="tickText" dataTipJsFunction="dataTipFunction" editMode="true" liveDragging="true" showDataTip="true" needleThickness="20" pointThickness="1" needleLengthRatio="0.35" needlePointStyle="steeple" needleBackLengthRatio="0" showTickLabels="false" tickLabelPosition="inside" showTrackColor="true" trackColors="[#e14159,#fa9c42,#facf4c,#88b14b,#5587a2]" trackAlphas="[1,1,1,1,1]" trackValues="[' + trackValues.toString() + ']" trackInnerRadius="0.55" trackOuterRadius="1" bounceAnimating="true" majorTickType="line" tickRadius="60" needleCoverRadius="18" trackLabels="[' + trackLabels.toString() + ']" trackLabelsXOffset="[-0.1,0,0,0,0.1]" trackLabelsYOffset="[0.2,0,-0.2,0,0.2]" needleTrackColorEnable="true">'
+                        +'<stroke>'
+                           +'<Stroke color="#CCCCCC" weight="1" alpha="0.5"/>'
+                       +'</stroke>'
+                      +'<frameStroke>'
+                          +'<Stroke color="#ffffff" weight="0" alpha="0"/>'
+                     +'</frameStroke>'
+                     +'<tickStroke>'
+                           +'<Stroke color="#ffffff" weight="4"/>'
+                       +'</tickStroke>'
+                      +'<frameFill>'
+                            +'<SolidColor color="#ffffff"/>'
+                      +'</frameFill>'
+                       +'<needleFill>'
+                           +'<SolidColor color="#555555"/>'
+                      +'</needleFill>'
+                      +'<needleStroke>'
+                         +'<SolidColor color="#555555"/>'
+                      +'</needleStroke>'
+                        +'<needleCoverStroke>'
+                            +'<Stroke color="#555555" weight="3"/>'
+                       +'</needleCoverStroke>'
+                   +'</HalfCircularGauge>'
+                   +'<Style>'
+                        +'.tickText{fontSize:15;color:0xFF6600;}'
+                       +'.trackText{fontSize:13;color:#ffffff;fontWeight:bold;}'
+                   +'</Style>'
+               +'</KoolChart>';
+ 
+// Sets data
+// var chartData2 = [70];
+var chartData2 = [{{ promedio }}];
+
+
+// Use the KoolChart.calls function to register the functions to be executed when the chart is ready.
+//
+// argument 1 - Chart Identifier
+// argument 2 - The function name to be executed (key) and the argument to be passed to the function (value)
+KoolChart.calls("chart2", {
+   "setLayout" : layoutStr2,
+    "setData" : chartData2
+});
+ 
+// Generates a random value
+function changeValue()
+{
+  // To change the gauge value, use the setData() function.
+   document.getElementById("chart2").setData([parseInt(Math.random()*100)]);
+}
+ 
+// For saving the gauge value.
+var gaugeValue;
+ 
+// JavaScript function that manages the event (valueChangeFunction).
+function valueChangeFunc(value)
+{
+ gaugeValue = value;
+}
+ 
+// For verifying the gauge value
+function commitValue()
+{
+ var str = "",
+       index = 0;
+ 
+  while(true){
+        if(gaugeValue >= trackValues[index] && gaugeValue <= trackValues[index + 1]){
+         str = trackLabels[index];
+           break;
+      }
+       index++;
+    }
+ 
+   str += " ( " + gaugeValue + " )";
+   alert(str);
+}
+ 
+// Tooltips
+function dataTipFunction(str)
+{
+   return "<font color='#FF2200'>Value: " + Math.round(str) + "</font>";
+}
+ 
+/**
+ * If you want to use themes provided with KoolChart version 3.0 or later, call the following functions.
+ * otherwise, comment out or delete the following functions.
+ *
+ * -- The Themes registered in KoolChart.themes --
+ * - simple
+ * - cyber
+ * - modern
+ * - lovely
+ * - pastel
+ * -------------------------------------------------
+ *
+ * The KoolChart.themes variable is defined in theme.js
+ */
+KoolChart.registerTheme(KoolChart.themes);
+ 
+/**
+ * The function called when the theme button in the sample HTML is clicked.
+ * Parameter Values:
+ * - simple
+ * - cyber
+ * - modern
+ * - lovely
+ * - pastel
+ * - default
+ *
+ * default: Applies the default theme which is the basic design of KoolChart.
+ */
+function KoolChartChangeTheme(theme){
+    document.getElementById("chart2").setTheme(theme);
+}
+ 
+// ----------------------- The end of the configuration for creating a chart. -----------------------
+
+KoolChart.create("chart3", "chartHolder3", "", "100%", "100%");
+ 
+// Use a string variable for Layout.
+var layoutStr3 =
+ '<KoolChart>'
+     +'<CurrencyFormatter id="cft" currencySymbol="%" alignSymbol="right" precision="0"/>'
+     /**
+      * showDataTips: Whether or not to show tooltips when the user mouse overs the item.
+         * minimum: Sets the minimum value of the gauge.
+         * maximum: Sets the maximum value of the gauge.
+         * targetValue: Sets the target value.
+       * showTargetLine: Whether or not to show the target value. default: false
+       * direction: Sets the output direction. default: vertical
+       * duration: Sets the duration time of the animation effect. default: 800
+        * showValueLabel: Whether or not to show the value. default: false
+      * showAnimation: Whether or not to play the animation effect. default: true
+         * valueChangeFunction: Sets a user-defined function to be called if the data changes.
+       * labelJsFunction: Sets a JS function to display user-defined label.
+        * fillJsFunction: Sets a JS function to fill user-defined color.
+        * formatter: Sets a formatter default: NumberFormatter
+      * bounceAnimating: Sets the bounce effect. default: true
+        * backgroundColor: Sets the background color. default: #ffffff
+      * backgroundAlpha: Sets the background transparency. default: 1
+         * backgroundStroke: Sets the border color.
+      * foregroundColor: Sets the fill color. default: #33eeff
+        * foreLineStroke: Sets the border color.
+        * horizontalRatio: Sets the horizontal ratio. default: 0.6
+      * verticalRatio: Sets the vertical ratio default: 0.8
+       * valueLabelHorizontalRatio: Sets the horizontal ratio of the value label. default; 0.5
+         * valueLabelVerticalRatio: Sets the vertical ratio of the value label. default: 0.5
+         * leftTopBorderRadius: Sets the color of the upper left border. default: 0
+      * rightTopBorderRadius: Sets the color of the upper right border. default: 0
+        * leftBottomRadius: Sets the color of the lower left border. default: 0
+         * rightBottomRadius: Sets the color of the lower right border. default: 0
+       */
+     +'<LinearGauge direction="horizontal" showValueLabel="true" verticalRatio="0.3" fontSize="20" labelJsFunction="colorLabelFunc" valueChangeFunction="changeFunction1" formatter="{cft}" foregroundColor="{{ color }}" color="#ffffff" fontWeight="bold" width="818">'
+            +'<backgroundStroke>'
+             +'<Stroke color="{{ color }}" weight="3"/>'
+           +'</backgroundStroke>'
+        +'</LinearGauge>'
+ +'</KoolChart>';
+
+// Sets data
+// var chartData3 = [80];
+
+ var chartData3 = [{{ puntaje }}];
+
+var gaugeValue1 = 10;
+// JavaScript function that manages the event (valueChangeFunction).
+function changeFunction1(value){
+//  gaugeValue1 = {{ puntaje }};
+  gaugeValue1 = 10;
+}
+
+KoolChart.calls("chart3", {
+   "setLayout" : layoutStr3,
+   "setData" : chartData3
+});
+
+function labelFunc(value){
+    return value+"%";
+}
+ 
+function colorLabelFunc(value){
+   var color = "#ffffff";
+  if(value <= 55)
+      color = "#555555";
+ 
+  return "<font color='" + color + "'>" + Math.floor(value) + "</font>";
+}
+
+</script>
+
+
     <h1 class="text-center m-5 pb-5">Score por conductor</h1>
+
+    <div style='page-break-before: always;'></div>
+    <h1>Hello from Page 2</h1>
 
     <div class="m-5 pb-5" style="font-size: 8px">
 
-
-            <table class="table table-sm table-striped" ">
+        <table class="table table-sm table-striped" ">
         <thead class="thead-dark ">
             <tr class="text-center ">
                 <th class="text-center align-middle " scope="col ">ID</th>
@@ -43,7 +319,7 @@
 
 <div> {{ unDriver }} </div>
 
-<div> {{ check}} </div>
+<div> {{ check }} </div>
 
 
 </body>

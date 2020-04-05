@@ -1,147 +1,169 @@
-const axios = require('axios')
-const path = require('path')
+const axios = require('axios');
+const path = require('path');
 const admin = require("firebase-admin");
+const dotenv = require('dotenv');
 
 // curl https://api.zendrive.com/v3/drivers?apikey=Mf8ZOERWLnwUuRLKLw4fnUhOsJChMbW9
 
+// El archivo .env hay que ponerlo en C:\home\apps\jsreportapp para que lo encuentre
+const result = dotenv.config();
 
+if (result.error) {
+    throw result.error
+}
+
+console.log("Result parsed" + JSON.stringify(result.parsed));
+console.log(result.parsed.PROCESAR);
+console.log(result.parsed.FECHA_INICIO);
+console.log(result.parsed.FECHA_FIN);
 
 async function beforeRender(req, res) {
+
     console.log("***********   En beforeRender **********************")
 
-    var next_offset = 0
 
-    var drivers = ''
+    if (result.parsed.PROCESAR == true) {
 
-    // req.data.zenResp.drivers = ''
+        var next_offset = 0
 
-    // Me traigo de Zendrive el listado de drivers.
+        var drivers = ''
 
-    do {
+        // req.data.zenResp.drivers = ''
 
-        // Leo de Zendrive
-        var url = 'https://api.zendrive.com/v3/drivers?apikey=Mf8ZOERWLnwUuRLKLw4fnUhOsJChMbW9&start_date=2019-09-01&end_date=2020-03-23&offset=' + next_offset
+        // Me traigo de Zendrive el listado de drivers.
 
-        console.log(url)
+        do {
 
-        // Leo de Zendrive
-        var r = await axios.get(url)
+            // Leo de Zendrive
+            var url = 'https://api.zendrive.com/v3/drivers?apikey=Mf8ZOERWLnwUuRLKLw4fnUhOsJChMbW9&start_date=2019-09-01&end_date=2020-03-23&offset=' + next_offset
 
-        //var r = await axios.get('https://api.zendrive.com/v3/drivers?apikey=Mf8ZOERWLnwUuRLKLw4fnUhOsJChMbW9&start_date=2019-09-01&end_date=2020-03-23&offset=0')
-        // req.data = { ...req.data, ...r.data}
+            console.log(url)
 
-        req.data.zenResp = r.data
+            // Leo de Zendrive
+            var r = await axios.get(url)
 
-        //drivers = r.data.drivers
+            //var r = await axios.get('https://api.zendrive.com/v3/drivers?apikey=Mf8ZOERWLnwUuRLKLw4fnUhOsJChMbW9&start_date=2019-09-01&end_date=2020-03-23&offset=0')
+            // req.data = { ...req.data, ...r.data}
 
-        console.log("drivers= " + drivers)
+            req.data.zenResp = r.data
 
-        if (drivers == '') {
-            console.log("Primera lectura: " + r.data.drivers[1].driver_id)
-            // Transfiero lo leído a un array local
-            drivers = r.data.drivers
-            console.log("TIPO de dato: " + typeof r.data.drivers);
-        } else {
-            console.log("CONCATENANDO " + r.data.drivers[1].driver_id)
-            // Concateno los nuevos drivers que traje de Zendrive a los ya leídos.
-            Array.prototype.push.apply(drivers, r.data.drivers);
+            //drivers = r.data.drivers
+
+            console.log("drivers= " + drivers)
+
+            if (drivers == '') {
+                console.log("Primera lectura: " + r.data.drivers[1].driver_id)
+                // Transfiero lo leído a un array local
+                drivers = r.data.drivers
+                console.log("TIPO de dato: " + typeof r.data.drivers);
+            } else {
+                console.log("CONCATENANDO " + r.data.drivers[1].driver_id)
+                // Concateno los nuevos drivers que traje de Zendrive a los ya leídos.
+                Array.prototype.push.apply(drivers, r.data.drivers);
+            }
+
+            console.log("drivers [1]= " + drivers[1].driver_id)
+
+            console.log("PARCIAL: " + req.data.zenResp)
+
+            next_offset = r.data.next_offset
+
+            console.log("NEXT OFFSET = " + r.data.next_offset)
+
+        }
+        while (next_offset > 0) // Voy a buscar la página siguiente si la hay (next_offset > 0)
+
+        // logueo por consola lo leído de Zendrive
+        console.log("TOTAL: " + JSON.stringify(drivers))
+
+        // Ahora voy a intentar traer desde Firebase el nombre y apellido de cada uno
+
+        // Inicializo la conexión a Firestore si es necesario
+        if (admin.apps.length === 0) {
+
+            console.log("Inicializando base");
+
+            console.log("Directorio APP" + __appDirectory);
+
+            // https://jsreport.net/blog/using-local-scripts-and-other-resources
+            var key = path.join(__appDirectory, 'serviceAccountKey.json')
+
+            // Cargo el archivo de clave
+            // let serviceAccount = require("./serviceAccountKey.json");
+            let serviceAccount = require(key);
+
+
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount)
+            });
+
         }
 
-        console.log("drivers [1]= " + drivers[1].driver_id)
+        db = admin.firestore();
 
-        console.log("PARCIAL: " + req.data.zenResp)
+        ///////////////////////////////////////////////////////////////////////
 
-        next_offset = r.data.next_offset
+        console.log("Buscando datos de uno: " + drivers[8].driver_id);
 
-        console.log("NEXT OFFSET = " + r.data.next_offset)
+        let driverRef = db.collection('boards').doc(drivers[8].driver_id);
 
-    }
-    while (next_offset > 0) // Voy a buscar la página siguiente si la hay (next_offset > 0)
-
-    // logueo por consola lo leído de Zendrive
-    console.log("TOTAL: " + JSON.stringify(drivers))
-
-    // Ahora voy a intentar traer desde Firebase el nombre y apellido de cada uno
-
-    // Inicializo la conexión a Firestore si es necesario
-    if (admin.apps.length === 0) {
-
-        console.log("Inicializando base");
-
-        console.log("Directorio APP" + __appDirectory);
-
-        // https://jsreport.net/blog/using-local-scripts-and-other-resources
-        var key = path.join(__appDirectory, 'serviceAccountKey.json')
-
-        // Cargo el archivo de clave
-        // let serviceAccount = require("./serviceAccountKey.json");
-        let serviceAccount = require(key);
-
-
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
-        });
-
-    }
-
-    db = admin.firestore();
-
-    ///////////////////////////////////////////////////////////////////////
-
-    console.log("Buscando datos de uno: " + drivers[8].driver_id);
-
-    let driverRef = db.collection('boards').doc(drivers[8].driver_id);
-
-    console.log("driverRef: " + JSON.stringify(driverRef));
-
-    let getDoc = await driverRef.get()
-        .then(doc => {
-            console.log('En el then');
-            if (!doc.exists) {
-                console.log('No such document!');
-            } else {
-                console.log('Document data:', doc.data().ConductorID + "  " + doc.data().Nombre + "  " + doc.data().Apellido);
-                tmp = doc.data().ConductorID;
-            }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
-        });
-
-    ///////////////////////////////////////////////////////////////////////
-
-
-    for (i = 0; i < drivers.length; i++) {
-
-        console.log("Buscando datos: " + drivers[i].driver_id);
-
-        let driverRef = db.collection('boards').doc(drivers[i].driver_id);
-
-        // console.log("driverRef: " + JSON.stringify(driverRef));
+        console.log("driverRef: " + JSON.stringify(driverRef));
 
         let getDoc = await driverRef.get()
             .then(doc => {
                 console.log('En el then');
                 if (!doc.exists) {
                     console.log('No such document!');
-                    drivers[i].info.attributes.last_name = 'Cadorna';
-                    drivers[i].info.attributes.first_name = 'Luigi';
                 } else {
                     console.log('Document data:', doc.data().ConductorID + "  " + doc.data().Nombre + "  " + doc.data().Apellido);
-                    drivers[i].info.attributes.last_name = doc.data().Apellido;
-                    drivers[i].info.attributes.first_name = doc.data().Nombre;
-                    //tmp = doc.data().ConductorID;
+                    tmp = doc.data().ConductorID;
                 }
             })
             .catch(err => {
                 console.log('Error getting document', err);
             });
 
-    };
+        ///////////////////////////////////////////////////////////////////////
 
+
+        for (i = 0; i < drivers.length; i++) {
+
+            console.log("Buscando datos: " + drivers[i].driver_id);
+
+            let driverRef = db.collection('boards').doc(drivers[i].driver_id);
+
+            // console.log("driverRef: " + JSON.stringify(driverRef));
+
+            let getDoc = await driverRef.get()
+                .then(doc => {
+                    console.log('En el then');
+                    if (!doc.exists) {
+                        console.log('No such document!');
+                        drivers[i].info.attributes.last_name = 'Cadorna';
+                        drivers[i].info.attributes.first_name = 'Luigi';
+                    } else {
+                        console.log('Document data:', doc.data().ConductorID + "  " + doc.data().Nombre + "  " + doc.data().Apellido);
+                        drivers[i].info.attributes.last_name = doc.data().Apellido;
+                        drivers[i].info.attributes.first_name = doc.data().Nombre;
+                        //tmp = doc.data().ConductorID;
+                    }
+                })
+                .catch(err => {
+                    console.log('Error getting document', err);
+                });
+
+        };
+
+    }
     req.data.drivers = drivers
 
     req.data.unDriver = ' algo'
+
+    req.data.puntaje = 70;
+    req.data.color = '#aaaaaa',
+
+        req.data.promedio = 50;
+
     //req.data.check = tmp
 
     console.log("Llegué al final")

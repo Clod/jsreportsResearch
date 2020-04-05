@@ -7,13 +7,16 @@
         "printBackground": true,
         "format": "A4",
         "mediaType": "screen",
-        "displayHeaderFooter": true
+        "displayHeaderFooter": true,
+        "landscape": false,
+        "waitForJS": false,
+        "waitForNetworkIddle": true
     },
     "creationDate": {
         "$$date": 1584924012440
     },
     "modificationDate": {
-        "$$date": 1585953108357
+        "$$date": 1586114730616
     },
     "_id": "sQs81e0WKW9LekFs",
     "$entitySet": "templates",
@@ -21,5 +24,12 @@
         {
             "shortid": "HJx2MVtS8L"
         }
-    ]
+    ],
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "pdfOperations": [],
+    "electron": {
+        "blockJavaScript": true
+    }
 }
